@@ -55,6 +55,35 @@ type RatingWordKey struct {
 	Word         string
 }
 
+var STOP_WORDS map[string]bool = map[string]bool{
+	"":     true,
+	"the":  true,
+	"it":   true,
+	"and":  true,
+	"to":   true,
+	"of":   true,
+	"this": true,
+	"not":  true,
+	"was":  true,
+	"but":  true,
+	"my":   true,
+	"for":  true,
+	"is":   true,
+	"with": true,
+	"have": true,
+	"as":   true,
+	"you":  true,
+	"in":   true,
+	"on":   true,
+	"so":   true,
+	"that": true,
+	"at":   true,
+	"be":   true,
+	"or":   true,
+	"has":  true,
+	"if":   true,
+}
+
 func main() {
 	csvFile, _ := os.Open(HW_FILE)
 	r := csv.NewReader(bufio.NewReader(csvFile))
@@ -93,7 +122,10 @@ func main() {
 					return strings.ToLower(strings.TrimSpace(s))
 				}),
 				func(s string) bool {
-					return s != ""
+					if len(s) <= 1 || STOP_WORDS[s] {
+						return false
+					}
+					return true
 				}),
 		}
 
